@@ -70,11 +70,15 @@ def parse_args():
 
 
 def main():
-    args = parse_args()
-
     # Note: change the path below to point to the tesseract binary
     pytesseract.tesseract_cmd = r'/usr/local/bin/tesseract'
 
+    # Failsafes for pyautogui (move the mouse to the top-left to abort, use a
+    # 0.1 second pause after each pyautogui call)
+    pyautogui.FAILSAFE = True
+    pyautogui.PAUSE = 0.1
+
+    args = parse_args()
     if args.source == SCREEN:
         countdown(args.delay)
         image = pyautogui.screenshot(region=args.region)
