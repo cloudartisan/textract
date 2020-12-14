@@ -46,8 +46,10 @@ def parse_args():
     parser = argparse.ArgumentParser(description='Extract text from image data')
     parser.add_argument('--enlarge', metavar='X', type=int, default=1,
             help='enlargement multiplier (enlarge by X, 1 is no change)')
-    parser.add_argument('--outfile', type=argparse.FileType('w'),
-            default=sys.stdout, help='write extracted text to the named file')
+    parser.add_argument('--save', metavar='FILENAME', type=str,
+            help='file to save the image, including transformations')
+    parser.add_argument('--outfile', type=argparse.FileType('w'), default=sys.stdout,
+            help='write extracted text to the named file')
 
     # Use a subparser to specify the source as screen or image
     subparsers = parser.add_subparsers(dest='source', title='sources',
@@ -58,13 +60,15 @@ def parse_args():
     subparser_screen = subparsers.add_parser(SCREEN, help='extract from the screen')
     subparser_screen.add_argument('--delay', type=int, default=0,
             help='delay in seconds before capturing the screen')
-    subparser_screen.add_argument('--region', type=int, nargs=4,
+    subparser_screen.add_argument('--region', metavar=('X1','Y1','X2','Y2'), type=int, nargs=4,
             help='region of the screen (x1 y1 x2 y2)')
 
     # Require that the user specify either stdin or an input file as the image source
     subparser_image = subparsers.add_parser(IMAGE, help='extract from an image')
-    subparser_image.add_argument('--infile', type=argparse.FileType('rb'),
-            default=sys.stdin.buffer)
+    subparser_image.add_argument('--infile', type=argparse.FileType('rb'), default=sys.stdin.buffer,
+            help='input file, otherwise assumes stdin')
+
+    # TODO add WINDOW subparser
 
     return parser.parse_args()
 
@@ -91,6 +95,12 @@ def main():
     if args.enlarge > 1:
         new_size = tuple(args.enlarge * x for x in image.size)
         image = image.resize(new_size, Image.ANTIALIAS)
+
+    # Save the transformed image; we do not save the raw, untransformed image
+    # because that is not what we processed and, presumably, we will always
+    # have access to that
+    if args.save:
+        image.save(args.save, 'png')
 
     output = pytesseract.image_to_string(image)
     args.outfile.write(output)
