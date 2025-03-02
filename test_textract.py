@@ -9,6 +9,9 @@ import sys
 import unittest
 from unittest.mock import patch, MagicMock
 
+# Mock pyautogui before importing textract to avoid DISPLAY issues
+sys.modules['pyautogui'] = MagicMock()
+
 import pytesseract
 from PIL import Image
 
