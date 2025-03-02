@@ -94,6 +94,22 @@ pip install .
 
 This will make the `textract` command available in your environment.
 
+## Development
+
+### Creating Releases
+
+To create a new release:
+
+```bash
+# Using GitHub CLI
+gh release create v0.1.0 --title "Textract v0.1.0" --notes "Release description here"
+
+# Or using Git tags and GitHub web interface
+git tag -a v0.1.0 -m "Release v0.1.0"
+git push origin v0.1.0
+# Then create release at: https://github.com/cloudartisan/textract/releases/new
+```
+
 ## TODO
 
 - Test for and handle image size limits 
