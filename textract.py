@@ -73,9 +73,46 @@ def parse_args():
     return parser.parse_args()
 
 
+def find_tesseract():
+    """
+    Auto-detect the tesseract binary location.
+    Return the path to the tesseract binary or None if not found.
+    """
+    import subprocess
+    import os
+    
+    # Common paths to check
+    possible_paths = [
+        '/usr/local/bin/tesseract',
+        '/opt/homebrew/bin/tesseract',
+        '/usr/bin/tesseract'
+    ]
+    
+    # First try to get it from PATH
+    try:
+        result = subprocess.run(['which', 'tesseract'], 
+                                capture_output=True, text=True, check=False)
+        if result.returncode == 0 and result.stdout.strip():
+            return result.stdout.strip()
+    except Exception:
+        pass
+    
+    # Check common locations
+    for path in possible_paths:
+        if os.path.isfile(path) and os.access(path, os.X_OK):
+            return path
+    
+    return None
+
+
 def main():
-    # Note: change the path below to point to the tesseract binary
-    pytesseract.tesseract_cmd = r'/usr/local/bin/tesseract'
+    # Auto-detect tesseract binary path
+    tesseract_path = find_tesseract()
+    if not tesseract_path:
+        print("Error: Tesseract not found. Please install tesseract-ocr package.", file=sys.stderr)
+        sys.exit(1)
+    
+    pytesseract.tesseract_cmd = tesseract_path
 
     # Failsafes for pyautogui (move the mouse to the top-left to abort, use a
     # 0.1 second pause after each pyautogui call)

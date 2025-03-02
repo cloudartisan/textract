@@ -1,6 +1,19 @@
+# Textract
+
+A Python tool for extracting text from images using OCR (Optical Character Recognition).
+
+## Features
+
+- Extract text from screen captures with optional delay
+- Extract text from image files
+- Specify screen regions for targeted extraction
+- Resize images to improve OCR accuracy
+- Save processed images
+- Output text to stdout or files
+
 ## Getting Started
 
-### Install pyenv & pipenv
+### Install dependencies
 
 For MacOS:
 
@@ -27,7 +40,34 @@ pipenv shell
 Or run commands in the shell:
 
 ```
-pipenv run ./pincidents.py [...]
+pipenv run python textract.py [arguments]
+```
+
+### Examples
+
+Extract text from screen with a 3-second delay:
+```
+pipenv run python textract.py screen --delay 3
+```
+
+Extract text from a specific screen region:
+```
+pipenv run python textract.py screen --region 100 100 500 300
+```
+
+Extract text from an image file:
+```
+pipenv run python textract.py image --infile test/terraform_text.png
+```
+
+Save the processed image:
+```
+pipenv run python textract.py image --infile test/terraform_text.png --save output.png
+```
+
+Enlarge the image by 2x for better OCR accuracy:
+```
+pipenv run python textract.py image --infile test/terraform_text.png --enlarge 2
 ```
 
 ## TODO
