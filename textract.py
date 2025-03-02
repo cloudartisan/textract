@@ -143,5 +143,10 @@ def main():
     args.outfile.write(output)
 
 
-if __name__ == '__main__':
+def cli():
+    """Entry point for the command line interface."""
     main()
+
+
+if __name__ == '__main__':
+    cli()

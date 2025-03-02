@@ -70,9 +70,32 @@ Enlarge the image by 2x for better OCR accuracy:
 pipenv run python textract.py image --infile test/terraform_text.png --enlarge 2
 ```
 
+## Tests
+
+Run the automated tests with:
+
+```
+python -m unittest test_textract.py
+```
+
+Or run a specific test:
+
+```
+python -m unittest test_textract.TestTextract.test_extract_terraform_text
+```
+
+## Installation
+
+You can install textract directly using pip:
+
+```
+pip install .
+```
+
+This will make the `textract` command available in your environment.
+
 ## TODO
 
-- Add automated tests
 - Test for and handle image size limits 
   - `DecompressionBombWarning ... exceeds limit of 89478485 pixels, could be decompression bomb DOS attack` from `PIL`
   - `TesseractError ... Image too large` from `pytesseract`
